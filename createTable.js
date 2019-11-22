@@ -18,7 +18,7 @@ const getData = () => JSON.parse(window.localStorage.getItem('packages'))
 
 const noDepsElement = (id) => {
     clearTableById(id)
-    const noDependencies = document.createTextNode("Package has no dependencies")
+    const noDependencies = document.createTextNode("Package has no dependencies or reverse dependencies")
     let backButton = document.createElement('button');
     const text = "List of all installed packages"
     backButton.innerHTML = "Go back to start"
