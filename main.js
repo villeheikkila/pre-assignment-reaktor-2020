@@ -15,22 +15,56 @@ document.addEventListener("DOMContentLoaded", () => {
 			const filter = element.split("\n").filter(line => line.startsWith("Package") || line.startsWith("Depends"))
 
 			// Parse the relevant package and dependency information
-			const package = filter[0] && filter[0].replace("Package: ", "")
+			const name = filter[0] && filter[0].replace("Package: ", "")
 			const depWithVersions = filter[1] ? filter[1].replace("Depends: ", "").split(", ") : [];
 			const dependencies = depWithVersions.map(dep => dep.length > 1 ? dep.split(" ")[0] : dep)
 
 			const result = {
-				package,
+				name,
 				dependencies,
 			}
 
 			collected.push(result)
 			return collected;
-
 		}, [])
 
-		console.log("depTrimmed", data)
+		// A function that renders a table with a list of all the installed packages
+		const createTable = (id, data) => {
+			console.log("hei", id)
+			data.forEach(package => {
+				let row = id.insertRow();
+				let cell = row.insertCell()
+				row.insertCell()
 
+				// Each package has a button with its own name as an id
+				let button = document.createElement("BUTTON")
+				button.addEventListener('click', (event) => {
+					event.preventDefault();
 
+					// Empty the table
+					id.innerHTML = "";
+
+					// Filter data for the packages that depend on the selected package
+					const dependencyData = data.filter(e => e.dependencies.includes(package.name))
+					if (dependencyData.length === 0) {
+						const noDependencies = document.createTextNode("Package has no dependencies")
+						id.appendChild(noDependencies)
+						console.log("The package has no dependencies")
+					}
+
+					createTable(id, dependencyData)
+
+				})
+
+				button.innerHTML = package.name
+				button.id = package.name
+				cell.appendChild(button)
+			})
+		}
+
+		// Selects the HTML element where to render
+		const id = document.getElementById("package")
+
+		createTable(id, data)
 	})
 });
