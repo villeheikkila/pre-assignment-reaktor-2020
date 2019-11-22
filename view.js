@@ -7,18 +7,18 @@ const clearTableById = (id) => {
 }
 
 const manageHeader = (text) => {
-    const header = document.getElementById("header")
+    const header = document.getElementById("textHeader")
     header.innerHTML = ""
     let element = document.createElement("h2")
     element.innerHTML = text
     header.appendChild(element)
 }
 
-const getData = () => JSON.parse(window.localStorage.getItem('packages'))
-
 const noDepsElement = (id) => {
     clearTableById(id)
-    const noDependencies = document.createTextNode("Package has no dependencies or reverse dependencies")
+
+    let noDependencies = document.createElement("h3")
+    noDependencies.innerHTML = "Package has no dependencies or reverse dependencies"
     let backButton = document.createElement('button');
     const text = "List of all installed packages"
     backButton.innerHTML = "Go back to start"
@@ -32,7 +32,6 @@ const noDepsElement = (id) => {
 // A function that renders a table with a list of all the installed packages
 const createTable = (id, data, text) => {
     clearTableById(id)
-    id.appendChild(document.createTextNode(text))
 
     data.forEach(package => {
         const header = text ? text : "Information about package " + package.name
@@ -47,6 +46,7 @@ const createTable = (id, data, text) => {
         let button = document.createElement("button")
         button.innerHTML = package.name
         button.id = package.name
+        button.class = "packageButton"
 
         button.addEventListener('click', (event) => {
             event.preventDefault();
@@ -73,7 +73,11 @@ const createTable = (id, data, text) => {
             let row = id.insertRow()
             let cell2 = row.insertCell()
             row.insertCell()
-            cell.appendChild(document.createTextNode(package.text))
+
+            let categoryText = document.createElement("h3")
+            categoryText.innerHTML = package.text
+
+            cell.appendChild(categoryText)
             cell2.appendChild(button)
         } else {
             cell.appendChild(button)

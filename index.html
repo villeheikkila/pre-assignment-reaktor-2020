@@ -6,17 +6,23 @@
     <title>Reaktor pre-assignment</title>
   </head>
   <body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//fonts.googleapis.com/css?family=Open+Sans"
+    />
     <link rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="fetchData.js"></script>
-    <script type="text/javascript" src="createTable.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="view.js"></script>
     <script type="text/javascript" src="main.js"></script>
     <h1>
       status.real information
     </h1>
     <div>
       <button id="fetchData">Click to fetch and show packages</button>
-      <div id="header"></div>
-      <table id="package"></table>
+      <div id="textHeader"></div>
+      <div id="packageTable"></div>
+      <table class="grid-container" id="package"></table>
     </div>
   </body>
 </html>

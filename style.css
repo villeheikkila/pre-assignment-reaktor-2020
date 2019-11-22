@@ -1,3 +1,34 @@
+* {
+  font-family: "Open Sans";
+}
+body {
+  background-color: rgba(57, 61, 63, 1);
+}
+
 h1 {
-  color: red;
+  color: white;
+  font-weight: bold;
+}
+
+h3 {
+  color: white;
+}
+
+#textHeader {
+  color: white;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+}
+
+button:hover {
+  color: #000000;
+  background-color: #ffffff;
 }

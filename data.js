@@ -25,5 +25,7 @@ const fetchData = async () => {
         return collected;
     }, [])
 
-    return data;
+    return data.sort((a, b) => a.name > b.name);
 }
+
+const getData = () => JSON.parse(window.localStorage.getItem('packages'))
