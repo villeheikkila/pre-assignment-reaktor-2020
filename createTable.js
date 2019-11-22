@@ -13,7 +13,12 @@ const noDepsElement = (id) => {
 }
 
 // A function that renders a table with a list of all the installed packages
-const createTable = (id, data) => {
+const createTable = (id, data, name, reverse = "") => {
+    // Empty the table
+    id.innerHTML = "";
+    const text = name ? document.createTextNode("List of all the " + reverse + " dependencies of the package " + name) : document.createTextNode("List of all the installed packages")
+    id.appendChild(text)
+
     data.forEach(package => {
         let row = id.insertRow();
         let cell = row.insertCell()
@@ -23,15 +28,21 @@ const createTable = (id, data) => {
         let button = document.createElement("BUTTON")
         button.addEventListener('click', (event) => {
             event.preventDefault();
-
-            // Empty the table
             id.innerHTML = "";
 
             // Filter data for the packages that depend on the selected package
-            const dependencyData = data.filter(e => e.dependencies.includes(package.name))
-            if (dependencyData.length === 0) noDepsElement(id)
-            createTable(id, dependencyData)
+            const dependencies = data.filter(e => package.dependencies.includes(e.name))
 
+            // Filter data for reverse dependencies
+            const reverseDependencies = data.filter(e => e.dependencies.includes(package.name))
+            console.log("dependencies ", dependencies)
+
+            if (dependencies.length === 0) noDepsElement(id)
+            else {
+                createTable(id, dependencies, package.name)
+                if (dependencies.length === 0) createTable(document.getElementById("package-two"), reverseDependencies, package.name, "reverse")
+
+            }
         })
 
         button.innerHTML = package.name
