@@ -1,3 +1,17 @@
+
+const noDepsElement = (id) => {
+    const noDependencies = document.createTextNode("Package has no dependencies")
+    let backButton = document.createElement('BUTTON');
+    backButton.innerHTML = "Go back to start"
+    backButton.addEventListener('click', () => {
+        const oldData = JSON.parse(window.localStorage.getItem('packages'))
+        createTable(id, oldData)
+    })
+
+    id.appendChild(noDependencies)
+    id.appendChild(backButton)
+}
+
 // A function that renders a table with a list of all the installed packages
 const createTable = (id, data) => {
     data.forEach(package => {
@@ -15,19 +29,7 @@ const createTable = (id, data) => {
 
             // Filter data for the packages that depend on the selected package
             const dependencyData = data.filter(e => e.dependencies.includes(package.name))
-            if (dependencyData.length === 0) {
-                const noDependencies = document.createTextNode("Package has no dependencies \n")
-                let linkElement = document.createElement('BUTTON');
-                let linkText = document.createTextNode("Go back to start");
-                linkElement.appendChild(linkText);
-                linkElement.title = "Go back to start";
-
-                document.body.appendChild(linkElement);
-                id.appendChild(noDependencies)
-                id.appendChild(linkElement)
-                console.log("The package has no dependencies")
-            }
-
+            if (dependencyData.length === 0) noDepsElement(id)
             createTable(id, dependencyData)
 
         })

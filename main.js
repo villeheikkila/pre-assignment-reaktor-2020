@@ -1,4 +1,5 @@
 
+
 // Wait till the content has been loaded
 document.addEventListener("DOMContentLoaded", () => {
 	// Listen to a click on the fetchData button
@@ -6,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.preventDefault();
 
 		const data = await fetchData();
+		window.localStorage.setItem('packages', JSON.stringify(data))
 		const id = document.getElementById("package")
 		createTable(id, data)
 	})
