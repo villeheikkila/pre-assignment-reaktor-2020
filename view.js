@@ -26,7 +26,6 @@ const noDepsElement = (id, name) => {
     newButton(id, "Go back to start", () => createTable(id, getData()))
 };
 
-
 // A function that renders a table with a list of all the installed packages
 const createTable = (idE, data, text = "List of all installed packages") => {
     const id = document.getElementById(idE);
@@ -36,12 +35,12 @@ const createTable = (idE, data, text = "List of all installed packages") => {
         const header = text ? text : "Information about package " + package.name;
         manageHeader(header);
 
-        let row = id.insertRow();
-        let cell = row.insertCell();
+        const row = id.insertRow();
+        const cell = row.insertCell();
         row.insertCell();
 
         // Create a button for the package.
-        let button = document.createElement("button");
+        const button = document.createElement("button");
         button.innerHTML = package.name;
         button.class = "packageButton";
 
@@ -66,11 +65,11 @@ const createTable = (idE, data, text = "List of all installed packages") => {
 
         // If the package is marked, display text indicating the category above it
         if (package.text) {
-            let row = id.insertRow();
-            let cell2 = row.insertCell();
-            row.insertCell();
+            const row2 = id.insertRow();
+            const cell2 = row2.insertCell();
+            row2.insertCell();
 
-            let categoryText = document.createElement("h3");
+            const categoryText = document.createElement("h3");
             categoryText.innerHTML = package.text;
 
             cell.appendChild(categoryText);
