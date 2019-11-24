@@ -1,6 +1,6 @@
 // Function that returns the data from status.real file
 const fetchData = async () => {
-    const getData = await fetch('status.real', { mode: 'no-cors' });
+    const getData = await fetch('/data/status.real', { mode: 'no-cors' });
     const textData = await getData.text();
 
     // Split the text file by package
@@ -14,19 +14,18 @@ const fetchData = async () => {
 
         // Parse the relevant package and dependency information
         const name = filter[0] && filter[0].replace("Package: ", "");
-
         const depWithVersions = filter[1] ? filter[1].replace("Depends: ", "").split(", ") : [];
         const dependencies = depWithVersions.map(dep => dep.length > 1 ? dep.split(" ")[0] : dep);
 
-        const result = {
+        collected.push({
             name,
             dependencies,
-        };
+        });
 
-        collected.push(result);
         return collected;
     }, [])
 
+    // Sort alphabetically
     return data.sort((a, b) => a.name > b.name);
 };
 
