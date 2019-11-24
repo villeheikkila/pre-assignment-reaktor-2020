@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		statistics(data);
 
 		// Render table of packages
-		const id = document.getElementById("package");
-		const text = "List of all installed packages";
-		createTable(id, data, text);
+		createTable("package", data);
 	})
 });
