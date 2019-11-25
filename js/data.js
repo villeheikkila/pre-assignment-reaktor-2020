@@ -1,13 +1,15 @@
 // Function that returns the data from status.real file
 const fetchData = async () => {
     const getData = await fetch('/data/status.real', { mode: 'no-cors' });
-    const textData = await getData.text();
+    return await getData.text();
+};
 
+const parseData = (data) => {
     // Split the text file by package
-    const arrayData = textData.split("\n\n");
+    const arrayData = data.split("\n\n");
 
     // Format the data to a nice array of objects
-    const data = arrayData.reduce((collected, element) => {
+    const modifiedData = arrayData.reduce((collected, element) => {
         // Remove all unneeded lines. If no matching entries are found, return.
         const filter = element.split("\n").filter(line => line.startsWith("Package") || line.startsWith("Depends"))
         if (!filter[0]) return collected;
@@ -26,9 +28,9 @@ const fetchData = async () => {
     }, [])
 
     // Sort alphabetically
-    return data.sort((a, b) => a.name > b.name);
-};
+    return modifiedData.sort((a, b) => a.name > b.name);
+}
 
-// Helper functions to manage the local storage
 const saveData = (data) => window.localStorage.setItem('packages', JSON.stringify(data));
+
 const getData = () => JSON.parse(window.localStorage.getItem('packages'));

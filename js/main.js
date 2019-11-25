@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById('fetchData').addEventListener('click', async (event) => {
 		event.preventDefault();
-		// Fetch data and save it to local store
-		const data = await fetchData();
+		// Fetch, parse and save data.
+		const rawData = await fetchData();
+		const data = parseData(rawData);
 		saveData(data);
 
 		// Render statistics

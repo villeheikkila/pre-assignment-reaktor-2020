@@ -1,6 +1,10 @@
-const newClearElement = (id, type, content) => {
+const clearContent = (id) => {
     const element = document.getElementById(id);
     element.innerHTML = "";
+}
+
+const newElement = (id, type, content) => {
+    const element = document.getElementById(id);
     const create = document.createElement(type);
     create.innerHTML = content;
     element.appendChild(create)
@@ -17,21 +21,29 @@ const newButton = (id, text, func) => {
     element.appendChild(button)
 };
 
-const insertCell = (element, id) => {
+const insertCell = (id, cellId) => {
+    const element = document.getElementById(id);
     const row = element.insertRow();
     const cell = row.insertCell();
-    cell.id = id;
+    cell.id = cellId;
     row.insertCell();
-    return id;
+    return cellId;
 };
 
-const manageHeader = (text) => newClearElement("textHeader", "h2", text);
+const manageHeader = (text, id = "textHeader") => {
+    clearContent(id);
+    newElement(id, "h2", text);
+};
 
-const statistics = (data) => newClearElement("statistics", "h3", `Number of packages installed: ${data.length}`)
+const statistics = (data, id = "statistics") => {
+    clearContent(id);
+    newElement(id, "h3", `Number of packages installed: ${data.length}`);
+}
 
 const noDepsElement = (id, name) => {
-    manageHeader(`Package ${name} has no dependencies or reverse dependencies`)
-    newButton(id, "Go back to start", () => createTable(id, getData()))
+    manageHeader(`Package ${name} has no dependencies or reverse dependencies`);
+    clearContent(id);
+    newButton(id, "Go back to start", () => createTable(id, getData()));
 };
 
 const newPackageEvent = (id, deps, name) => {
@@ -55,8 +67,7 @@ const newPackageEvent = (id, deps, name) => {
 
 // A function that renders a table with a list of all the installed packages
 const createTable = (id, data, text = "List of all installed packages") => {
-    const element = document.getElementById(id);
-    element.innerHTML = "";
+    clearContent(id);
 
     data.forEach(package => {
         const header = text ? text : `Information about package ${package.name}`;
@@ -64,13 +75,13 @@ const createTable = (id, data, text = "List of all installed packages") => {
 
         // If the package is marked, display text indicating the category above it
         if (package.text) {
-            const textId = insertCell(element, package.text[16])
-            newClearElement(textId, "h3", package.text)
+            const textId = insertCell(id, package.text[16])
+            newElement(textId, "h3", package.text)
 
-            const cellId = insertCell(element, package.name)
+            const cellId = insertCell(id, package.name)
             newButton(cellId, package.name, () => newPackageEvent(id, package.dependencies, package.name))
         } else {
-            const cellId = insertCell(element, package.name)
+            const cellId = insertCell(id, package.name)
             newButton(cellId, package.name, () => newPackageEvent(id, package.dependencies, package.name))
         };
     });
