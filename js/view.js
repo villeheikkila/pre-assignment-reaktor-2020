@@ -35,7 +35,6 @@ const noDepsElement = (id, name) => {
 };
 
 const newPackageEvent = (id, deps, name) => {
-    id.innerHTML = "";
     const data = getData();
     // Filter the dependencies of the package from overall data
     const dependencies = data.filter(e => deps.includes(e.name));
