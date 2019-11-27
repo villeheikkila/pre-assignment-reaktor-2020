@@ -3,22 +3,18 @@ const clearContent = (id) => {
     element.innerHTML = "";
 }
 
-const newElement = (id, type, content) => {
+const newElement = (id, type, content, func) => {
     const element = document.getElementById(id);
+    element.innerHTML = "";
     const create = document.createElement(type);
     create.innerHTML = content;
+    if (func) {
+        create.addEventListener('click', (e) => {
+            e.preventDefault();
+            func()
+        })
+    }
     element.appendChild(create)
-};
-
-const newButton = (id, text, func) => {
-    const element = document.getElementById(id);
-    const button = document.createElement('button');
-    button.innerHTML = text
-    button.addEventListener('click', (e) => {
-        e.preventDefault();
-        func()
-    })
-    element.appendChild(button)
 };
 
 const insertCell = (id, cellId) => {
@@ -30,19 +26,12 @@ const insertCell = (id, cellId) => {
     return cellId;
 };
 
-const manageHeader = (text, id = "textHeader") => {
-    clearContent(id);
-    newElement(id, "h2", text);
-};
+const manageHeader = (text, id = "textHeader") => newElement(id, "h2", text);
 
-const statistics = (data, id = "statistics") => {
-    clearContent(id);
-    newElement(id, "h3", `Number of packages installed: ${data.length}`);
-}
+const statistics = (data, id = "statistics") => newElement(id, "h3", `Number of packages installed: ${data.length}`);
 
 const noDepsElement = (id, name) => {
     manageHeader(`Package ${name} has no dependencies or reverse dependencies`);
-    clearContent(id);
     newButton(id, "Go back to start", () => createTable(id, getData()));
 };
 
@@ -79,10 +68,10 @@ const createTable = (id, data, text = "List of all installed packages") => {
             newElement(textId, "h3", package.text)
 
             const cellId = insertCell(id, package.name)
-            newButton(cellId, package.name, () => newPackageEvent(id, package.dependencies, package.name))
+            newElement(cellId, 'button', package.name, () => newPackageEvent(id, package.dependencies, package.name))
         } else {
             const cellId = insertCell(id, package.name)
-            newButton(cellId, package.name, () => newPackageEvent(id, package.dependencies, package.name))
+            newElement(cellId, 'button', package.name, () => newPackageEvent(id, package.dependencies, package.name))
         };
     });
 };
