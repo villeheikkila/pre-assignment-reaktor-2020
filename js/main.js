@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.preventDefault();
 		// Fetch, parse and save data.
 		const rawData = await fetchData();
-		const data = parseData(rawData);
+		const data = parsePackageInformation(rawData);
 		saveData(data);
 
 		// Render statistics

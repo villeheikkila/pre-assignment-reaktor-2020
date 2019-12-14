@@ -28,6 +28,8 @@ const insertCell = (id, cellId) => {
 
 const manageHeader = (text, id = "textHeader") => newElement(id, "h2", text);
 
+const manageDescription = (text, id = "description") => newElement(id, "p", text);
+
 const statistics = (data, id = "statistics") => newElement(id, "h3", `Number of packages installed: ${data.length}`);
 
 const noDepsElement = (id, name) => {
@@ -35,8 +37,13 @@ const noDepsElement = (id, name) => {
     newButton(id, "Go back to start", () => createTable(id, getData()));
 };
 
-const newPackageEvent = (id, deps, name) => {
+const newPackageEvent = (id, name) => {
     const data = getData();
+
+    const packageData = data.filter(e => e.name === name)[0]
+    const description = packageData.description
+    const deps = packageData.dependencies
+
     // Filter the dependencies of the package from overall data
     const dependencies = data.filter(e => deps.includes(e.name));
 
@@ -51,15 +58,17 @@ const newPackageEvent = (id, deps, name) => {
 
     // If there's no dependencies or reverse dependencies, show link pack to home view
     if (combined.length === 0) noDepsElement(id, name);
-    else createTable(id, combined, `Information about package ${name}`);
+    else createTable(id, combined, `Information about package ${name}`, description);
 }
 
 // A function that renders a table with a list of all the installed packages
-const createTable = (id, data, text = "List of all installed packages") => {
+const createTable = (id, data, text = "List of all installed packages", description = "") => {
+    console.log("TCL: createTable -> description", description)
     clearContent(id);
 
     data.forEach(package => {
         manageHeader(text);
+        manageDescription(description)
 
         // If the package is marked, display text indicating the category above it
         if (package.text) {
@@ -67,10 +76,10 @@ const createTable = (id, data, text = "List of all installed packages") => {
             newElement(textId, "h3", package.text)
 
             const cellId = insertCell(id, package.name)
-            newElement(cellId, 'button', package.name, () => newPackageEvent(id, package.dependencies, package.name))
+            newElement(cellId, 'button', package.name, () => newPackageEvent(id, package.name))
         } else {
             const cellId = insertCell(id, package.name)
-            newElement(cellId, 'button', package.name, () => newPackageEvent(id, package.dependencies, package.name))
+            newElement(cellId, 'button', package.name, () => newPackageEvent(id, package.name))
         };
     });
 };
