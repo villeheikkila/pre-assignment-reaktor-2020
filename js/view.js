@@ -51,7 +51,7 @@ const newPackageEvent = (id, deps, name) => {
 
     // If there's no dependencies or reverse dependencies, show link pack to home view
     if (combined.length === 0) noDepsElement(id, name);
-    else createTable(id, combined, "");
+    else createTable(id, combined, `Information about package ${name}`);
 }
 
 // A function that renders a table with a list of all the installed packages
@@ -59,8 +59,7 @@ const createTable = (id, data, text = "List of all installed packages") => {
     clearContent(id);
 
     data.forEach(package => {
-        const header = text ? text : `Information about package ${package.name}`;
-        manageHeader(header);
+        manageHeader(text);
 
         // If the package is marked, display text indicating the category above it
         if (package.text) {
