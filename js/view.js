@@ -30,6 +30,9 @@ const manageHeader = (text, id = "textHeader") => newElement(id, "h2", text);
 
 const manageDescription = (text, id = "description") => newElement(id, "p", text);
 
+const manageAlternatives = (text, id = "alternatives") => newElement(id, "p", `Alternative dependencies ${text}`);
+
+
 const statistics = (data, id = "statistics") => newElement(id, "h3", `Number of packages installed: ${data.length}`);
 
 const noDepsElement = (id, name) => {
@@ -40,12 +43,14 @@ const noDepsElement = (id, name) => {
 const newPackageEvent = (id, name) => {
     const data = getData();
 
-    const packageData = data.filter(e => e.name === name)[0]
-    const description = packageData.description
-    const deps = packageData.dependencies
+    const { description, alternatives, dependencies: deps } = data.filter(e => e.name === name)[0]
 
-    // Filter the dependencies of the package from overall data
-    const dependencies = data.filter(e => deps.includes(e.name));
+    // Filter Alternatives from overall data
+    const firstAlternativeThatExists = alternatives.length > 0 ? data.find(e => alternatives.includes(e.name)) : [];
+    const otherAlternatives = alternatives.filter(e => e !== firstAlternativeThatExists.name).join(" ")
+
+    // Filter the dependencies of the package from overall data and add first found alternative package
+    const dependencies = data.filter(e => deps.includes(e.name)).concat(firstAlternativeThatExists);
 
     // Filter the reverse dependencies of the package from overall data. 
     const reverseDependencies = data.filter(e => e.dependencies.includes(name));
@@ -58,17 +63,18 @@ const newPackageEvent = (id, name) => {
 
     // If there's no dependencies or reverse dependencies, show link pack to home view
     if (combined.length === 0) noDepsElement(id, name);
-    else createTable(id, combined, `Information about package ${name}`, description);
+    else createTable(id, combined, `Information about package ${name}`, description, otherAlternatives);
 }
 
 // A function that renders a table with a list of all the installed packages
-const createTable = (id, data, text = "List of all installed packages", description = "") => {
-    console.log("TCL: createTable -> description", description)
+const createTable = (id, data, text = "List of all installed packages", description = "", alternatives) => {
     clearContent(id);
+    clearContent("alternatives");
 
     data.forEach(package => {
         manageHeader(text);
         manageDescription(description)
+        if (alternatives) manageAlternatives(alternatives)
 
         // If the package is marked, display text indicating the category above it
         if (package.text) {

@@ -2,7 +2,9 @@ const parseName = (string) => string.replace("Package: ", "")
 
 const parseDependencies = (string) => {
     const depWithVersions = string ? string.replace("Depends: ", "").split(", ") : [];
-    return depWithVersions.map(dep => dep.length > 1 ? dep.split(" ")[0] : dep);
+    const normal = depWithVersions.filter(e => !e.includes("|")).map(dep => dep.length > 1 ? dep.split(" ")[0] : dep)
+    const alternatives = depWithVersions.filter(e => e.includes("|")).map(e => e.split(" | ")).flat().map(dep => dep.length > 1 ? dep.split(" ")[0] : dep)
+    return { normal, alternatives }
 }
 
 const parseDescription = (string) => {
@@ -21,13 +23,15 @@ const parsePackageInformation = (data) => {
         if (!filter[0]) return collected;
 
         const name = parseName(filter[0])
-        const dependencies = parseDependencies(filter[1])
+        const { normal: dependencies, alternatives } = parseDependencies(filter[1])
+
         const description = element.includes("Description") ? parseDescription(element) : null
 
         collected.push({
             name,
             dependencies,
-            description
+            description,
+            alternatives
         });
 
         return collected;

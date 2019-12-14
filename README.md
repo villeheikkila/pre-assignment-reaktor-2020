@@ -23,4 +23,4 @@ On a Debian and Ubuntu systems, there is a file called /var/lib/dpkg/status that
 
 - Only look at the Depends field. Ignore other fields that work kind of similarly, such as Suggests and Recommends. ✔️
 
-- Sometimes there are alternates in a dependency list, separated by the pipe character |. When rendering such dependencies, render any alternative that maps to a package name that has an entry in the file as a link and just print the name of the package name for other packages.
+- Sometimes there are alternates in a dependency list, separated by the pipe character |. When rendering such dependencies, render any alternative that maps to a package name that has an entry in the file as a link and just print the name of the package name for other packages. ✔️
